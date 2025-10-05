@@ -1,4 +1,27 @@
 const express = require("express");
+//this imports our database and names it ourApp.db
+const db = require("better-sqlite3")("ourApp.db")
+//this makes the performace and speed better?????/
+db.pragma("journal_mode = WAL")
+
+//database setup here
+//can see it by downloading from here https://sqlitebrowser.org/ and clicling open database and choosing ourApp.db
+//name of the table is users
+//and it has 3 columns: id, username, password
+const createTables = db.transaction(() => {
+    db.prepare(`
+        CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username STRING NOT NULL UNIQUE,
+        password STRING NOT NULL
+        )
+    `).run()
+});
+createTables();
+//database setup ends here
+
+
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -41,11 +64,19 @@ app.post("/register", (req,res)=>{
     if(req.body.password && req.body.password.length < 6) errors.push("Password must be at least 6 characters long")
     if(req.body.password && req.body.password.length > 12) errors.push("Password can't exceed 12 characters")
     
+    //if there are errors, render them on the homepage
+    //ex:it shows the error on the homepage
     if (errors.length){
         return res.render("homepage",{errors})
     }
-    else{
-        res.send("thank you");
-    }
+
+    //save the user into the database
+    const ourStatement = db.prepare("INSERT INTO users (username, password) VALUES (?,?)")
+    ourStatement.run(req.body.username, req.body.password)
+    res.send("thank you")
+    //log the user in by giving them a cookie
+    //so that they see their logged in page
+
+
 });
 app.listen(8000);

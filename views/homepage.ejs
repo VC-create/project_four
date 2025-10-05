@@ -17,6 +17,7 @@
             <!--post creates new user -->
             <!--form action tells what to do-->
             <form action="/register" method="POST">
+            <!--this adds JS that shows the error-->
             <% errors.forEach(error => { %>
                 <!--the = makes it escape the output text??????-->
                 <p class="notice"><%= error %></p>
