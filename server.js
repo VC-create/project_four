@@ -8,5 +8,7 @@ app.get("/", (req,res)=>{
     res.render("homepage.ejs");
 });
 
-
+app.get("/login", (req,res)=>{
+    res.render("login.ejs");
+});
 app.listen(8000);
