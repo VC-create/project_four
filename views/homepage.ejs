@@ -14,6 +14,13 @@
             </nav>
         </header>
         <main>
+            <!--post creates new user -->
+            <!--form action tells what to do-->
+            <form action="/register" method="POST">
+            <% errors.forEach(error => { %>
+                <!--the = makes it escape the output text??????-->
+                <p class="notice"><%= error %></p>
+            <% }) %>
             <fieldset>
                 <legend>Create an account</legend>
                 <label for="username"><small>Username</small></label>
@@ -27,5 +34,6 @@
         <footer>
             <small>&copy;Our App</small>
         </footer>
+        </form>
     </body>
 </html>
