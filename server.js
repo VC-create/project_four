@@ -79,4 +79,9 @@ app.post("/register", (req,res)=>{
 
 
 });
+
+const tableInfo = db.prepare("PRAGMA table_info(users)").all();
+console.log("Table schema:", tableInfo);
+
+
 app.listen(8000);
