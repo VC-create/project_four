@@ -1,4 +1,7 @@
 const express = require("express");
+
+//this hashes peoples passwords
+const bcrypt = require("bcrypt");
 //this imports our database and names it ourApp.db
 const db = require("better-sqlite3")("ourApp.db")
 //this makes the performace and speed better?????/
@@ -9,6 +12,8 @@ db.pragma("journal_mode = WAL")
 //name of the table is users
 //and it has 3 columns: id, username, password
 
+//db.prepare("DROP TABLE IF EXISTS users").run();
+//ran the line abaove to delete the table and recreate it, then it worked fine
 const createTables = db.transaction(() => {
     db.prepare(`
         CREATE TABLE IF NOT EXISTS users (
@@ -71,10 +76,14 @@ app.post("/register", (req,res)=>{
         return res.render("homepage",{errors})
     }
 
+    //hashing the password
+    const salt = bcrypt.genSaltSync(10);
+    req.body.password = bcrypt.hashSync(req.body.password, salt);
     //save the user into the database
     const ourStatement = db.prepare("INSERT INTO users (username, password) VALUES (?,?)")
     ourStatement.run(req.body.username, req.body.password)
-    res.send("thank you")
+    //res.send("thank you")
+
     //log the user in by giving them a cookie
     //so that they see their logged in page
 
