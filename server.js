@@ -93,7 +93,7 @@ app.post("/register", (req,res)=>{
         maxAge:1000 * 60 * 60 * 24
     })
 
-
+    res.send("thank you")
 });
 
 const PORT = 3000;
