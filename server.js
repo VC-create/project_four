@@ -73,7 +73,7 @@ app.post("/register", (req,res)=>{
     //if there are errors, render them on the homepage
     //ex:it shows the error on the homepage
     if (errors.length){
-        return res.render("homepage",{errors})
+        return res.render("homepage",{errors});
     }
 
     //hashing the password
@@ -96,4 +96,5 @@ app.post("/register", (req,res)=>{
 
 });
 
-app.listen(3000);
+const PORT = 3000;
+app.listen(PORT);
