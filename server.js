@@ -86,6 +86,12 @@ app.post("/register", (req,res)=>{
 
     //log the user in by giving them a cookie
     //so that they see their logged in page
+    res.cookie("ourSimpleApp","supertopsecretvalue",{
+        httpOnly:true,
+        secure:true,
+        sameSite:"strict",
+        maxAge:1000 * 60 * 60 * 24
+    })
 
 
 });
