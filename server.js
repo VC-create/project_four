@@ -8,6 +8,7 @@ db.pragma("journal_mode = WAL")
 //can see it by downloading from here https://sqlitebrowser.org/ and clicling open database and choosing ourApp.db
 //name of the table is users
 //and it has 3 columns: id, username, password
+
 const createTables = db.transaction(() => {
     db.prepare(`
         CREATE TABLE IF NOT EXISTS users (
@@ -80,8 +81,4 @@ app.post("/register", (req,res)=>{
 
 });
 
-const tableInfo = db.prepare("PRAGMA table_info(users)").all();
-console.log("Table schema:", tableInfo);
-
-
-app.listen(8000);
+app.listen(3000);
