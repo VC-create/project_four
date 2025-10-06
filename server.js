@@ -1,4 +1,7 @@
+require("dotenv").config()
+//previous line configs the .env file so we can access the stuff in it
 const express = require("express");
+const jwt = require("jsonwebstoken");
 
 //this hashes peoples passwords
 const bcrypt = require("bcrypt");
@@ -81,11 +84,17 @@ app.post("/register", (req,res)=>{
     req.body.password = bcrypt.hashSync(req.body.password, salt);
     //save the user into the database
     const ourStatement = db.prepare("INSERT INTO users (username, password) VALUES (?,?)")
-    ourStatement.run(req.body.username, req.body.password)
+    const result = ourStatement.run(req.body.username, req.body.password)
+
+    const lookupStatement = db.prepare("SELECT * FROM users  WHERE ROWID = ?");
+    //gets the id from the last user in the database
+    const ourUser = lookupStatement.get(result.lastInsertRowid);
     //res.send("thank you")
 
     //log the user in by giving them a cookie
     //so that they see their logged in page
+    const ourTokenValue = jwt.sign({exp: Math.floor(Date.now()/1000) + 60*60*24,skyColor:"blue",userid:ourUser.id, username: ourUser.username},process.env.JWTSECRET)
+    
     res.cookie("ourSimpleApp","supertopsecretvalue",{
         httpOnly:true,
         secure:true,
