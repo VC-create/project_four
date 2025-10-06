@@ -1,0 +1,14 @@
+        <header>
+            <h2><a href="/">Our App</a></h2>
+            <nav>
+                <!--if user=true, they're logged in, it's a valid token-->
+                <!--if they're logged in, show them the create post and log out options with corresponding routes-->
+                <% if(user){%>
+                    <a href="/create-post">Create Post</a>
+                    <a href="/logout">Log Out</a>
+                <%} else {%>
+                    <!--otherwise if they're not logged in, show them the login option-->
+                    <a href="/login">Log In</a>
+                <% }%>
+            </nav>
+        </header>

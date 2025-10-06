@@ -72,11 +72,64 @@ app.get("/login", (req,res)=>{
     res.render("login.ejs");
 });
 
+//when the user clicks the logout button, it activates this logout route
+//which clears the cookie by saying the name of the cookie which was ourSimpleApp
+//and it redirects them to the homepage
 app.get("/logout", (req,res)=>{
     res.clearCookie("ourSimpleApp");
     res.redirect("/");
 });
 
+app.post("/login",(req,res)=>{
+    //check for errors when logging in - when they click the login button
+    let errors=[]
+
+    //check to make sure the type is a string and there's no funny buisness
+    if(typeof req.body.username!=="string") req.body.username=""
+    if(typeof req.body.password!=="string") req.body.password=""
+
+    //if the username or password is empty give error message
+    if(req.body.username.trim()=="") errors=["Invalid username/password"];
+    if(req.body.username=="") errors=["Invalid username/password"];
+    
+    //if there is any errors in errors array, show the login page again but with the errors at the top
+    if (errors.length){
+        return res.render("login.ejs",{errors});
+    }
+
+    //now check if the password is a match in the database
+    //* means all, the first line selects the column of all usernames
+    //the second line gets the username of that specific user
+    const userInQuestionStatement = db.prepare("SELECT * FROM users WHERE USERNAME=?");
+    const userInQuestion = userInQuestionStatement.get(req.body.username);
+    
+    //if there isn't a match, return the error right away
+    if(!userInQuestion){
+        errors = ["Invalid username/password"];
+        return res.render("login.ejs",{errors});
+    }
+
+    //comapre the password in the databse (userInQuestion.password) with what they entered in req.body
+    const matchOrNot = bcrypt.compareSync(req.body.password,userInQuestion.password)
+    if(!matchOrNot){
+        errors = ["Invalid username/password"];
+        return res.render("login.ejs",{errors});
+    }
+
+    //give them a cookie if its actually a match and redirect them
+    const ourTokenValue = jwt.sign({exp: Math.floor(Date.now()/1000) + 60*60*24,skyColor:"blue",userid:userInQuestion.id, username: userInQuestion.username},process.env.JWTSECRET)
+    
+    //makes it secure for them
+    res.cookie("ourSimpleApp",ourTokenValue,{
+        httpOnly:true,
+        secure:true,
+        sameSite:"strict",
+        maxAge:1000 * 60 * 60 * 24
+    })
+
+    res.redirect("/");
+
+});
 
 app.post("/register", (req,res)=>{
     const errors=[]
@@ -92,6 +145,11 @@ app.post("/register", (req,res)=>{
     if(req.body.username && req.body.username.length < 6) errors.push("Username must be at least 6 characters long")
     if(req.body.username && req.body.username.length > 12) errors.push("Username can't exceed 12 characters")
     if(req.body.username && !req.body.username.match(/^[a-zA-Z0-9]+$/)) errors.push("Username can only contain letters and numbers")
+
+    //check if username already exists
+    const usernameStatement = db.prepare("SELECT * FROM users WHERE username=?");
+    const usernameCheck = usernameStatement.get(req.body.username);
+    if(usernameCheck) errors.push("That username already exists");
 
     if(!req.body.password) errors.push("You must provide a password")
     if(req.body.password && req.body.password.length < 6) errors.push("Password must be at least 6 characters long")
@@ -127,7 +185,11 @@ app.post("/register", (req,res)=>{
         maxAge:1000 * 60 * 60 * 24
     })
 
-    res.send("thank you")
+    res.redirect("/");
+});
+
+app.get("/create-post", (req,res)=>{
+    res.render("create-post.ejs");
 });
 
 const PORT = 3000;
