@@ -1,10 +1,11 @@
-require("dotenv").config()
+require("dotenv").config();
 //previous line configs the .env file so we can access the stuff in it
 const express = require("express");
 const jwt = require("jsonwebtoken");
 
 //this hashes peoples passwords
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
 //this imports our database and names it ourApp.db
 const db = require("better-sqlite3")("ourApp.db")
 //this makes the performace and speed better?????/
@@ -37,11 +38,23 @@ app.set("view engine", "ejs");
 //makes it so that we can access values the user put in
 app.use(express.urlencoded({extended:false}))
 app.use(express.static("public"));
+app.use(cookieParser())
 
 //middleware
 app.use(function(req,res,next){
     //locals makes it avaible to the views system
     res.locals.errors = [];
+
+    //try to decode incoming cookie
+    //helps to check if user is logged in
+    try {
+        const decoded = jwt.verify(req.cookies.ourSimpleApp,process.env.JWTSECRET);
+        req.user = decoded;
+    } catch (error) {
+        req.user = false;
+    }
+    res.locals.user = req.user;
+    console.log(req.user);
     next();
     //first it sets the array then renders the homepage 
 });
@@ -95,6 +108,7 @@ app.post("/register", (req,res)=>{
     //so that they see their logged in page
     const ourTokenValue = jwt.sign({exp: Math.floor(Date.now()/1000) + 60*60*24,skyColor:"blue",userid:ourUser.id, username: ourUser.username},process.env.JWTSECRET)
     
+    //makes it secure for them
     res.cookie("ourSimpleApp",ourTokenValue,{
         httpOnly:true,
         secure:true,
