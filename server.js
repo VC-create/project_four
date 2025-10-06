@@ -1,7 +1,7 @@
 require("dotenv").config()
 //previous line configs the .env file so we can access the stuff in it
 const express = require("express");
-const jwt = require("jsonwebstoken");
+const jwt = require("jsonwebtoken");
 
 //this hashes peoples passwords
 const bcrypt = require("bcrypt");
@@ -95,7 +95,7 @@ app.post("/register", (req,res)=>{
     //so that they see their logged in page
     const ourTokenValue = jwt.sign({exp: Math.floor(Date.now()/1000) + 60*60*24,skyColor:"blue",userid:ourUser.id, username: ourUser.username},process.env.JWTSECRET)
     
-    res.cookie("ourSimpleApp","supertopsecretvalue",{
+    res.cookie("ourSimpleApp",ourTokenValue,{
         httpOnly:true,
         secure:true,
         sameSite:"strict",
