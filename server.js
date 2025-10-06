@@ -60,6 +60,11 @@ app.use(function(req,res,next){
 });
 
 app.get("/", (req,res)=>{
+    //if theyre logged in
+    if(req.user){
+        //return it so that it doesn't execute the rest of the statement
+        return res.render("dashboard.ejs");
+    }
     res.render("homepage.ejs");
 });
 
@@ -89,7 +94,7 @@ app.post("/register", (req,res)=>{
     //if there are errors, render them on the homepage
     //ex:it shows the error on the homepage
     if (errors.length){
-        return res.render("homepage",{errors});
+        return res.render("homepage.ejs",{errors});
     }
 
     //hashing the password
