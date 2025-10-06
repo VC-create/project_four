@@ -6,20 +6,20 @@
         <main>
             <!--post creates new user -->
             <!--form action tells what to do-->
-            <form action="/login" method="POST">
+            <form action="/create-post" method="POST">
             <!--this adds JS that shows the error-->
             <% errors.forEach(error => { %>
                 <!--the = makes it escape the output text??????-->
                 <p class="notice"><%= error %></p>
             <% }) %>
             <fieldset>
-                <legend>Log In</legend>
-                <label for="username"><small>Username</small></label>
-                <input type="text" id="username" name="username">
-                <label for="password"><small>Password</small></label>
-                <input type="password" id="password" name="password">
+                <legend>Create a New Post</legend>
+                <label for="title"><small>Title</small></label>
+                <input type="text" id="title" name="title">
+                <label for="body"><small>Content</small></label>
+                <textarea name="body" id="body"></textarea>
                 <br/>
-                <button>Log In</button>
+                <button>Save New Post</button>
             </fieldset>
             </form>
         </main>

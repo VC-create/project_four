@@ -1,4 +1,5 @@
 require("dotenv").config();
+const sanitizeHTML = require("sanitize-html");
 //previous line configs the .env file so we can access the stuff in it
 const express = require("express");
 const jwt = require("jsonwebtoken");
@@ -188,8 +189,43 @@ app.post("/register", (req,res)=>{
     res.redirect("/");
 });
 
-app.get("/create-post", (req,res)=>{
+//create a reusable function to be used by create-post - form of middleware
+//checks if userIsLogged in before they can create a post
+function mustBeLoggedIn(req,res,next){
+    if(req.user){
+        return next();
+    }
+    return res.redirect("/");
+}
+
+app.get("/create-post", mustBeLoggedIn, (req,res)=>{
     res.render("create-post.ejs");
+});
+
+
+function sharedPostValidation(req){
+    const errors = [];
+
+    if(typeof req.body.title !=="string") req.body.title="";
+    if(typeof req.body.title !=="string") req.body.title="";
+
+    //take out malicious html from database
+    req.body.title = sanitizeHTML(req.body.title.trim(),{allowedTags:[], allowedAttributes: {}});
+    req.body.body = sanitizeHTML(req.body.body.trim(),{allowedTags:[], allowedAttributes: {}});
+
+    //check to make sure it isn't empty
+    if(!req.body.title) errors.push("You must provide a title");
+    if(!req.body.body) errors.push("You must provide content");
+    
+    return errors;
+}
+//when you submit the form, it goes here, because the form is of method POST
+app.post("/create-post", mustBeLoggedIn, (req,res)=>{
+    const errors = sharedPostValidation(req);
+    if(errors.length){
+        return res.render("create-post",{errors});
+    }
+    //save into database
 });
 
 const PORT = 3000;
