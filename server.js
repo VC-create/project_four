@@ -54,7 +54,7 @@ app.use(function(req,res,next){
         req.user = false;
     }
     res.locals.user = req.user;
-    console.log(req.user);
+    //console.log(req.user);
     next();
     //first it sets the array then renders the homepage 
 });
