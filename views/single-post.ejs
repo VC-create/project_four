@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <%- include("includes/head")%>
+    <body>
+        <%- include("includes/header")%>
+        <main>
+            <!--= sign escapes the HTML, so that it's not rendered as actual html on the page-->
+            <h1><%= post.title%></h1>
+        </main>
+        <%- include("includes/footer")%>
+    </body>
+</html>

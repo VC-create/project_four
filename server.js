@@ -233,13 +233,13 @@ function sharedPostValidation(req){
 }
 
 //this makes it dynamic so it works with any id, because you don't want to hardcode it
-app.get("/post:id", (req,res)=>{
-    const statement = db.prepare("SELECT * FROM POSTS WHERE id = ?");
+app.get("/post/:id", (req,res)=>{
+    const statement = db.prepare("SELECT * FROM posts WHERE id = ?");
     const post = statement.get(req.params.id); 
 
     //if that id doesn't exist for the post, like they're trying to access a page that doesn;t exist
     if(!post){
-        return res.redirect("/")
+        return res.redirect("/");
     }
 
     //return the page that has that post 
