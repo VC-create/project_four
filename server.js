@@ -234,7 +234,9 @@ function sharedPostValidation(req){
 
 //this makes it dynamic so it works with any id, because you don't want to hardcode it
 app.get("/post/:id", (req,res)=>{
-    const statement = db.prepare("SELECT * FROM posts WHERE id = ?");
+    //conect the tables by joining them with author id and users.id (its the same thing)
+    //try to find the id here so you can use it to say who it's posted by 
+    const statement = db.prepare("SELECT posts.*, users.username FROM posts INNER JOIN users on posts.authorid = users.id WHERE posts.id = ?");
     const post = statement.get(req.params.id); 
 
     //if that id doesn't exist for the post, like they're trying to access a page that doesn;t exist

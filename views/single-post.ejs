@@ -6,6 +6,10 @@
         <main>
             <!--= sign escapes the HTML, so that it's not rendered as actual html on the page-->
             <h1><%= post.title%></h1>
+            <article>
+                <small>Posted by username on date</small>
+                <div><%= post.body%></div>
+            </article>
         </main>
         <%- include("includes/footer")%>
     </body>
