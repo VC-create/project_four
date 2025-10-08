@@ -7,7 +7,7 @@
             <!--= sign escapes the HTML, so that it's not rendered as actual html on the page-->
             <h1><%= post.title%></h1>
             <article>
-                <small>Posted by username on date</small>
+                <small>Posted by <%=post.username%> on <%=new Date(post.createdDate).getMonth() + 1%>/<%=new Date(post.createdDate).getDate()%>/<%=new Date(post.createdDate).getFullYear()%></small>
                 <div><%= post.body%></div>
             </article>
         </main>
