@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 //this imports our database and names it ourApp.db
 const db = require("better-sqlite3")("ourApp.db")
-//this makes the performace and speed better?????/
+//this makes the performace and speed better
 db.pragma("journal_mode = WAL")
 
 //database setup here
@@ -214,7 +214,7 @@ app.get("/create-post", mustBeLoggedIn, (req,res)=>{
     res.render("create-post.ejs");
 });
 
-
+//use this to check for errors later on, in the create post route
 function sharedPostValidation(req){
     const errors = [];
 
@@ -231,20 +231,39 @@ function sharedPostValidation(req){
     
     return errors;
 }
-//when you submit the form, it goes here, because the form is of method POST
+
+//this makes it dynamic so it works with any id, because you don't want to hardcode it
+app.get("/post:id", (req,res)=>{
+    const statement = db.prepare("SELECT * FROM POSTS WHERE id = ?");
+    const post = statement.get(req.params.id); 
+
+    //if that id doesn't exist for the post, like they're trying to access a page that doesn;t exist
+    if(!post){
+        return res.redirect("/")
+    }
+
+    //return the page that has that post 
+    //render it with the ejs template
+    res.render("single-post.ejs", {post}); 
+});
+
+//when you submit the form for creating a post, it goes here, because the form is of method POST
 app.post("/create-post", mustBeLoggedIn, (req,res)=>{
     const errors = sharedPostValidation(req);
     if(errors.length){
         return res.render("create-post",{errors});
     }
-    //save into database
+    //save into database by adding it into posts
+    //same thing as how we saved the user in /register route
     const ourStatement = db.prepare("INSERT INTO posts(title,body,authorid, createdDate) VALUES (?,?,?,?)");
     const result = ourStatement.run(req.body.title, req.body.body, req.user.userid, new Date().toISOString());
     
     const getPostStatement = db.prepare("SELECT * FROM posts WHERE ROWID = ?");
     const realPost = getPostStatement.get(result.lastInsertRowid);
-    console.log(realPost);
-    res.redirect(`/posts/${realPost.id}`);
+    //console.log(realPost);
+    //so far this just sends them to that unique id for the post, but it doesn't render them a page since that route 
+    //with the unique id doesn't exist yet
+    res.redirect(`/post/${realPost.id}`);
 
 });
 
