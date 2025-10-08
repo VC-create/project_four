@@ -19,6 +19,7 @@ db.pragma("journal_mode = WAL")
 
 //db.prepare("DROP TABLE IF EXISTS users").run();
 //ran the line abaove to delete the table and recreate it, then it worked fine
+//authorid referneces id
 const createTables = db.transaction(() => {
     db.prepare(`
         CREATE TABLE IF NOT EXISTS users (
@@ -27,6 +28,16 @@ const createTables = db.transaction(() => {
         password STRING NOT NULL
         )
     `).run()
+    db.prepare(`
+        CREATE TABLE IF NOT EXISTS posts(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        createdDate TEXT,
+        title STRING NOT NULL,
+        body TEXT NIT NULL,
+        authorid INTEGER,
+        FOREIGN KEY(authorid) REFERENCES user (id)
+        )
+    `)
 });
 createTables();
 //database setup ends here
@@ -209,7 +220,7 @@ function sharedPostValidation(req){
     if(typeof req.body.title !=="string") req.body.title="";
     if(typeof req.body.title !=="string") req.body.title="";
 
-    //take out malicious html from database
+    //take out malicious html from database (from the title and body)
     req.body.title = sanitizeHTML(req.body.title.trim(),{allowedTags:[], allowedAttributes: {}});
     req.body.body = sanitizeHTML(req.body.body.trim(),{allowedTags:[], allowedAttributes: {}});
 
