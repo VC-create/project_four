@@ -18,6 +18,7 @@ db.pragma("journal_mode = WAL")
 //and it has 3 columns: id, username, password
 
 //db.prepare("DROP TABLE IF EXISTS users").run();
+db.prepare("DROP TABLE IF EXISTS users").run();
 //ran the line abaove to delete the table and recreate it, then it worked fine
 //authorid referneces id
 const createTables = db.transaction(() => {
@@ -237,6 +238,13 @@ app.post("/create-post", mustBeLoggedIn, (req,res)=>{
         return res.render("create-post",{errors});
     }
     //save into database
+    const ourStatement = db.prepare("INSERT INTO posts(title,body,authorid, createdDate) VALUES (?,?,?,?)");
+    const result = ourStatement.run(req.body.title, req.body.body, req.user.userid, new Date().toISOString());
+    
+    const getPostStatement = db.prepare("SELECT * FROM posts WHERE ROWID = ?");
+    const realPost = getPostStatement.get(result.lastInsertRowid);
+    res.redirect(`/posts/${realPost.id}`);
+
 });
 
 const PORT = 3000;
