@@ -18,7 +18,7 @@ db.pragma("journal_mode = WAL")
 //and it has 3 columns: id, username, password
 
 //db.prepare("DROP TABLE IF EXISTS users").run();
-db.prepare("DROP TABLE IF EXISTS users").run();
+//db.prepare("DROP TABLE IF EXISTS posts").run();
 //ran the line abaove to delete the table and recreate it, then it worked fine
 //authorid referneces id
 const createTables = db.transaction(() => {
@@ -34,11 +34,11 @@ const createTables = db.transaction(() => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         createdDate TEXT,
         title STRING NOT NULL,
-        body TEXT NIT NULL,
+        body TEXT NOT NULL,
         authorid INTEGER,
-        FOREIGN KEY(authorid) REFERENCES user (id)
+        FOREIGN KEY(authorid) REFERENCES users (id)
         )
-    `)
+    `).run()
 });
 createTables();
 //database setup ends here
@@ -243,6 +243,7 @@ app.post("/create-post", mustBeLoggedIn, (req,res)=>{
     
     const getPostStatement = db.prepare("SELECT * FROM posts WHERE ROWID = ?");
     const realPost = getPostStatement.get(result.lastInsertRowid);
+    console.log(realPost);
     res.redirect(`/posts/${realPost.id}`);
 
 });
