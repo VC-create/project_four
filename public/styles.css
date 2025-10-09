@@ -20,28 +20,6 @@
   --disabled: #efefef;
 }
 
-/* dark mode*/
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --bg: #212121;
-    --accent-bg: #2b2b2b;
-    --text: #dcdcdc;
-    --text-light: #ababab;
-    --accent: #ffb300;
-    --accent-hover: #ffe099;
-    --accent-text: var(--bg);
-    --code: #f06292;
-    --preformatted: #ccc;
-    --disabled: #111;
-  }
-
-  img,
-  video {
-    opacity: 0.8;
-  }
-}
-
 /* reset and global elements*/
 *,
 :before,
@@ -372,92 +350,7 @@ input[type="radio"]:checked {
   background-color: var(--accent);
 }
 
-/* tables */
-table {
-  border-collapse: collapse;
-  margin: 1.5rem 0;
-}
-
-td,
-th {
-  border: var(--border-width) solid var(--border);
-  text-align: start;
-  padding: 0.5rem;
-}
-
-th {
-  background-color: var(--accent-bg);
-  font-weight: 700;
-}
-
-tr:nth-child(2n) {
-  background-color: var(--accent-bg);
-}
-
-/* media and figures */
-img,
-video {
-  border-radius: var(--standard-border-radius);
-  max-width: 100%;
-  height: auto;
-}
-
-figure {
-  margin: 0;
-  display: block;
-  overflow-x: auto;
-}
-
-figcaption {
-  text-align: center;
-  color: var(--text-light);
-  margin-block: 1rem;
-  font-size: 0.9rem;
-}
-
-/* code, pre, blockquote, mark */
-code,
-pre,
-kbd,
-samp {
-  font-family: var(--mono-font);
-  color: var(--code);
-}
-
-pre {
-  max-width: 100%;
-  color: var(--preformatted);
-  padding: 1rem 1.4rem;
-  overflow: auto;
-}
-
-blockquote {
-  border-inline-start: 0.35rem solid var(--accent);
-  color: var(--text-light);
-  margin-block: 2rem;
-  margin-inline: 2rem 0;
-  padding: 0.4rem 0.8rem;
-  font-style: italic;
-}
-
-mark {
-  border-radius: var(--standard-border-radius);
-  background-color: var(--marked);
-  color: #000;
-  padding: 2px 5px;
-}
-
-/* progress,dialouge, and miscellaneous */
-progress {
-  width: 100%;
-}
-
-dialog {
-  background-color: var(--bg);
-  max-width: 40rem;
-  margin: auto;
-}
-
+/* miscellaneous */
 @media only screen and (width <= 720px) {
   dialog {
     max-width: calc(100vw - 2rem);
