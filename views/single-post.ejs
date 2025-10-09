@@ -11,7 +11,12 @@
                 <div><%= post.body%></div>
             </article>
 
+            <!---Get request with a href here-->
             <a href="/edit-post/<%=post.id%>" class="button">Edit Post</a>
+            <!--post request here with the form-->
+            <form style="display:inline;" action="/delete-post/<%=post.id%>" method="POST">
+                <button>Delete Post</button>
+            </form>
 
         </main>
         <%- include("includes/footer")%>
