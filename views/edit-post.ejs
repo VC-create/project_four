@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <%- include("includes/head")%>
+    <body>
+        <%- include("includes/header")%>
+        <main>
+            <!--post creates new user -->
+            <!--form action tells what to do-->
+            <form action="/create-post" method="POST">
+            <!--this adds JS that shows the error-->
+            <% errors.forEach(error => { %>
+                <!--the = makes it escape the output text??????-->
+                <p class="notice"><%= error %></p>
+            <% }) %>
+            <fieldset>
+                <legend>Edit Existing Post</legend>
+                <label for="title"><small>Title</small></label>
+                <input type="text" value="<%=post.title%>"id="title" name="title">
+                <label for="body"><small>Content</small></label>
+                <textarea name="body" id="body"><%=post.body%></textarea>
+                <br/>
+                <button>Save Changes</button>
+            </fieldset>
+            </form>
+        </main>
+        <%- include("includes/footer")%>
+    </body>
+</html>

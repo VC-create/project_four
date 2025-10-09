@@ -217,7 +217,7 @@ app.get("/create-post", mustBeLoggedIn, (req,res)=>{
     res.render("create-post.ejs");
 });
 
-//use this to check for errors later on, in the create post route
+//use this to check for errors later on, in the create post, edit post, etc routes
 function sharedPostValidation(req){
     const errors = [];
 
@@ -234,6 +234,45 @@ function sharedPostValidation(req){
     
     return errors;
 }
+
+//this just gets all the data that is needed to edit the post, but it doesn't save those edits into the database
+//you need a post request to save the changes in the database
+app.get("/edit-post/:id", (req,res)=>{
+    //look up the post in question
+    const statement = db.prepare("SELECT * FROM posts WHERE id =?");
+    const post = statement.get(req.params.id);
+
+    //check to make sure id of post exists, make sure they're not trying to access page that doesn't exist
+    if(!post){
+        return res.redirect("/");
+    }
+    //if not the author, redirect back to homepage /
+    if(post.authorid!==req.user.userid){
+        return res.redirect("/");
+    }
+    //otherwise if you are the author, render the edit-post ejs template
+    res.render("edit-post", {post});
+});
+
+app.post("/edit-post/:id", (req,res)=>{
+    const statement = db.prepare("SELECT * FROM posts WHERE id =?");
+    const post = statement.get(req.params.id);
+    if(!post){
+        return res.redirect("/");
+    }
+    if(post.authorid!==req.user.userid){
+        return res.redirect("/");
+    }
+    const errors =sharedPostValidation(req);
+    if(errors.length){
+        return res.render("edit-post", {errors});
+    }
+    const updateStatement = db.prepare("UPDATE posts SET title=?, body=? WHERE id=?");
+    updateStatement.run(req.body.title, req.body.body, req.params.id);
+
+    res.redirect(`/post${req.params.id}`);
+
+});
 
 //this makes it dynamic so it works with any id, because you don't want to hardcode it
 app.get("/post/:id", (req,res)=>{
