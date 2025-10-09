@@ -76,7 +76,10 @@ app.get("/", (req,res)=>{
     //if theyre logged in
     if(req.user){
         //return it so that it doesn't execute the rest of the statement
-        return res.render("dashboard.ejs");
+        const postsStatement = db.prepare("SELECT * FROM posts WHERE authorid = ?");
+        //.all() will return an array, multiple objects instead of a single object like .get()
+        const posts = postsStatement.all(req.user.userid);
+        return res.render("dashboard.ejs", {posts});
     }
     res.render("homepage.ejs");
 });
@@ -240,7 +243,7 @@ app.get("/post/:id", (req,res)=>{
     const statement = db.prepare("SELECT posts.*, users.username FROM posts INNER JOIN users on posts.authorid = users.id WHERE posts.id = ?");
     const post = statement.get(req.params.id); 
 
-    //if that id doesn't exist for the post, like they're trying to access a page that doesn;t exist
+    //if that id doesn't exist for the post, like they're trying to access a page that doesn't exist
     if(!post){
         return res.redirect("/");
     }
