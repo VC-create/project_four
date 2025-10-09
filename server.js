@@ -85,8 +85,9 @@ app.use(function(req,res,next){
 app.get("/", (req,res)=>{
     //if theyre logged in
     if(req.user){
-        //return it so that it doesn't execute the rest of the statement
-        const postsStatement = db.prepare("SELECT * FROM posts WHERE authorid = ?");
+        //shows them their posts, get the posts first
+        //order them by most recent on top
+        const postsStatement = db.prepare("SELECT * FROM posts WHERE authorid = ? ORDER BY createdDate DESC");
         //.all() will return an array, multiple objects instead of a single object like .get()
         const posts = postsStatement.all(req.user.userid);
         return res.render("dashboard.ejs", {posts});
