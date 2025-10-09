@@ -237,7 +237,7 @@ function sharedPostValidation(req){
 
 //this just gets all the data that is needed to edit the post, but it doesn't save those edits into the database
 //you need a post request to save the changes in the database
-app.get("/edit-post/:id", (req,res)=>{
+app.get("/edit-post/:id", mustBeLoggedIn,(req,res)=>{
     //look up the post in question
     const statement = db.prepare("SELECT * FROM posts WHERE id =?");
     const post = statement.get(req.params.id);
@@ -254,7 +254,7 @@ app.get("/edit-post/:id", (req,res)=>{
     res.render("edit-post", {post});
 });
 
-app.post("/edit-post/:id", (req,res)=>{
+app.post("/edit-post/:id", mustBeLoggedIn,(req,res)=>{
     const statement = db.prepare("SELECT * FROM posts WHERE id =?");
     const post = statement.get(req.params.id);
     if(!post){
@@ -270,8 +270,23 @@ app.post("/edit-post/:id", (req,res)=>{
     const updateStatement = db.prepare("UPDATE posts SET title=?, body=? WHERE id=?");
     updateStatement.run(req.body.title, req.body.body, req.params.id);
 
-    res.redirect(`/post${req.params.id}`);
+    res.redirect(`/post/${req.params.id}`);
 
+});
+
+app.post("/delete-post/:id", mustBeLoggedIn,(req,res)=>{
+    const statement = db.prepare("SELECT * FROM posts WHERE id =?");
+    const post = statement.get(req.params.id);
+    if(!post){
+        return res.redirect("/");
+    }
+    if(post.authorid!==req.user.userid){
+        return res.redirect("/");
+    }
+
+    const deleteStatement = db.prepare("DELETE FROM posts WHERE id=?");
+    deleteStatement.run(req.params.id);
+    res.redirect("/");
 });
 
 //this makes it dynamic so it works with any id, because you don't want to hardcode it

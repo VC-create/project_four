@@ -6,7 +6,7 @@
         <main>
             <!--post creates new user -->
             <!--form action tells what to do-->
-            <form action="/create-post" method="POST">
+            <form action="/edit-post/<%=post.id%>" method="POST">
             <!--this adds JS that shows the error-->
             <% errors.forEach(error => { %>
                 <!--the = makes it escape the output text??????-->
