@@ -4,7 +4,11 @@
     <body>
         <%- include("includes/header")%>
         <main>
-            <h2>Welcome to your dashboard</h2>
+            <% if(posts.length===0){%>
+                <h2>Hello <%=user.username%>. Create a post!</h2>
+            <%} else {%>
+                <h2>Hello <%=user.username%>. Here are your posts!</h2>
+            <% }%>
             <ul>
                 <% posts.forEach(post=>{ %>
                     <li><a href="/post/<%=post.id%>"><%=post.title%></a> on <%=new Date(post.createdDate).getMonth() + 1%>/<%=new Date(post.createdDate).getDate()%>/<%=new Date(post.createdDate).getFullYear()%></li>

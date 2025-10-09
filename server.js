@@ -1,5 +1,6 @@
 require("dotenv").config();
 const sanitizeHTML = require("sanitize-html");
+const marked = require("marked");
 //previous line configs the .env file so we can access the stuff in it
 const express = require("express");
 const jwt = require("jsonwebtoken");
@@ -54,7 +55,16 @@ app.use(express.static("public"));
 app.use(cookieParser())
 
 //middleware
+//this function is used for every route in our application;
 app.use(function(req,res,next){
+    //make our markdown function avialable to views
+    //marked.parse turns the text into html 
+    res.locals.filterUserHTML = function(content){
+        return sanitizeHTML(marked.parse(content), {
+            allowedTags: ["p", "br", "ul", "li", "ol", "strong", "bold", "i", "em", "h1", "h2", "h3", "h4", "h5", "h6"] , 
+            allowedAttributes: {}
+        })
+    }
     //locals makes it avaible to the views system
     res.locals.errors = [];
 
@@ -301,10 +311,11 @@ app.get("/post/:id", (req,res)=>{
     if(!post){
         return res.redirect("/");
     }
-
+    const isAuthor = post.authorid === req.user.userid;
     //return the page that has that post 
     //render it with the ejs template
-    res.render("single-post.ejs", {post}); 
+    //this also passes the isAuthor to the ejs page so you can use it there
+    res.render("single-post.ejs", {post, isAuthor}); 
 });
 
 //when you submit the form for creating a post, it goes here, because the form is of method POST
