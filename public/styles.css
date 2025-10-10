@@ -1,23 +1,32 @@
 /*root variables*/
+/*use root as opposed to * because * selects everything individually and applies it to all of them, so each element sets its 
+own copy of the variable, whereas root variables can be resued over and over in each element*/
+/*root is overall more efficient and less redundant*/
 :root {
-  --sans-font: -apple-system, BlinkMacSystemFont, "Avenir Next", Avenir,
+  /*defines overall font for web app*/
+  --font: -apple-system, BlinkMacSystemFont, "Avenir Next", Avenir,
     "Nimbus Sans L", Roboto, "Noto Sans", "Segoe UI", Arial, Helvetica,
     "Helvetica Neue", sans-serif;
-  --mono-font: Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  /*defines how rounded buttons will be on the site(bigger # means more rounded)*/
   --standard-border-radius: 5px;
-  --border-width: 1px;
-  --bg: #cdeaf4;
-  --accent-bg: #77a1c5;
-  --text: #212121;
+  /*defines width(thickness) of borders across site*/
+  --border-width: 2px;
+  /*defines background color*/
+  --bg-color: #cdeaf4;
+  /*defines additional background color*/
+  --accent-bg-color: #77a1c5;
+  /*defines text color*/
+  --text-color: #212121;
+  /*defines secondary text color - lighter gray for footers, etc*/
   --text-light: #585858;
+  /*defines border color*/
   --border: #898ea4;
-  --accent: #0d47a1;
-  --accent-hover: #1266e2;
-  --accent-text: var(--bg);
-  --code: #d81b60;
-  --preformatted: #444;
-  --marked: #fd3;
-  --disabled: #efefef;
+  /*defines highlight color, used for buttons, etc*/
+  --highlight-color: #0d47a1;
+  /*defines color when people hover over highlighted elements*/
+  --highlight-hover-color: #1266e2;
+  /*defines the text color of highlighted elements, ex:text inside buttons*/
+  --highlight-text-color: var(--bg-color);
 }
 
 /* reset and global elements*/
@@ -37,13 +46,13 @@ progress {
 }
 
 html {
-  font-family: var(--sans-font);
+  font-family: var(--font);
   scroll-behavior: smooth;
 }
 
 body {
-  color: var(--text);
-  background-color: var(--bg);
+  color: var(--text-color);
+  background-color: var(--bg-color);
   display: grid;
   grid-template-columns: 1fr min(45rem, 90%) 1fr;
   margin: 0;
@@ -57,7 +66,7 @@ body > * {
 
 /* header and footer */
 body > header {
-  background-color: var(--accent-bg);
+  background-color: var(--accent-bg-color);
   border-bottom: var(--border-width) solid var(--border);
   text-align: center;
   grid-column: 1 / -1;
@@ -155,7 +164,7 @@ h3 {
 /* links and buttons */
 a,
 a:visited {
-  color: var(--accent);
+  color: var(--highlight-color);
 }
 
 a:hover {
@@ -168,9 +177,9 @@ a.button,
 input[type="submit"],
 input[type="reset"],
 input[type="button"] {
-  border: var(--border-width) solid var(--accent);
-  background-color: var(--accent);
-  color: var(--accent-text);
+  border: var(--border-width) solid var(--hightlight-color);
+  background-color: var(--highlight-color);
+  color: var(--highlight-text-color);
   padding: 0.5rem 0.9rem;
   line-height: normal;
   text-decoration: none;
@@ -181,20 +190,9 @@ button:enabled:hover,
 input[type="submit"]:enabled:hover,
 input[type="reset"]:enabled:hover,
 input[type="button"]:enabled:hover {
-  background-color: var(--accent-hover);
-  border-color: var(--accent-hover);
+  background-color: var(--highlight-hover-color);
+  border-color: var(--highlight-hover-color);
   cursor: pointer;
-}
-
-.button[aria-disabled="true"],
-input:disabled,
-textarea:disabled,
-select:disabled,
-button[disabled] {
-  cursor: not-allowed;
-  background-color: var(--disabled);
-  border-color: var(--disabled);
-  color: var(--text-light);
 }
 
 /* navigation */
@@ -219,7 +217,7 @@ header nav a,
 header nav a:visited {
   border: var(--border-width) solid var(--border);
   border-radius: var(--standard-border-radius);
-  color: var(--text);
+  color: var(--text-color);
   margin: 0 0.5rem 1rem;
   padding: 0.1rem 1rem;
   text-decoration: none;
@@ -230,9 +228,9 @@ header nav a:hover,
 header nav a.current,
 header nav a[aria-current="page"],
 header nav a[aria-current="true"] {
-  background: var(--bg);
-  border-color: var(--accent);
-  color: var(--accent);
+  background: var(--bg-color);
+  border-color: var(--highlight-color);
+  color: var(--highlight-color);
 }
 
 @media only screen and (width <= 720px) {
@@ -321,8 +319,8 @@ button,
 textarea,
 select,
 input {
-  color: var(--text);
-  background-color: var(--bg);
+  color: var(--text-color);
+  background-color: var(--bg-color);
   border: var(--border-width) solid var(--border);
 }
 
@@ -347,7 +345,7 @@ input[type="radio"] {
 
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
-  background-color: var(--accent);
+  background-color: var(--highlight-color);
 }
 
 /* miscellaneous */
