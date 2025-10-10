@@ -254,14 +254,6 @@ main {
   padding-top: 1.5rem;
 }
 
-aside {
-  float: right;
-  width: 30%;
-  margin-inline-start: 15px;
-  padding: 0 15px;
-  font-size: 1rem;
-}
-
 [dir="rtl"] aside {
   float: left;
 }
@@ -282,28 +274,6 @@ dialog {
   border-radius: var(--standard-border-radius);
   margin-bottom: 1rem;
   padding: 1rem;
-}
-
-section {
-  border-top: var(--border-width) solid var(--border);
-  border-bottom: var(--border-width) solid var(--border);
-  margin: 3rem 0;
-  padding: 2rem 1rem;
-}
-
-section + section,
-section:first-child {
-  border-top: 0;
-  padding-top: 0;
-}
-
-section + section {
-  margin-top: 0;
-}
-
-section:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
 }
 
 /* forms and inputs */
@@ -334,58 +304,9 @@ textarea:not([cols]) {
   width: 90%;
 }
 
-input[type="checkbox"],
-input[type="radio"] {
-  vertical-align: middle;
-  width: min-content;
-  position: relative;
-}
-
-input[type="radio"] {
-  border-radius: 100%;
-}
-
-input[type="checkbox"]:checked,
-input[type="radio"]:checked {
-  background-color: var(--highlight-color);
-}
-
 /* miscellaneous */
 @media only screen and (width <= 720px) {
   dialog {
     max-width: calc(100vw - 2rem);
-  }
-}
-
-/* print styles */
-@media print {
-  @page {
-    margin: 1cm;
-  }
-
-  body {
-    display: block;
-  }
-
-  body > header {
-    background-color: unset;
-  }
-
-  body > header nav,
-  body > footer {
-    display: none;
-  }
-
-  article {
-    border: none;
-    padding: 0;
-  }
-
-  a[href^="http"]:after {
-    content: " <" attr(href) ">";
-  }
-
-  abbr[title]:after {
-    content: " (" attr(title) ")";
   }
 }
