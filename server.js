@@ -274,8 +274,9 @@ app.post("/edit-post/:id", mustBeLoggedIn,(req,res)=>{
     if(post.authorid!==req.user.userid){
         return res.redirect("/");
     }
-    const errors =sharedPostValidation(req);
+    const errors = sharedPostValidation(req);
     if(errors.length){
+        //this gives the errors to the ejs template so it can display them using embedded js
         return res.render("edit-post", {errors});
     }
     const updateStatement = db.prepare("UPDATE posts SET title=?, body=? WHERE id=?");

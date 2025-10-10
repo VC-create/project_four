@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+    <!--here you use - because you want to include the raw html that you wrote-->
+    <!--you want to include that html exactly how it is so use the - sign, it's including all the html stored in the ejs file like a variabke-->
+    <!--usually you don't want to include the - sign because it can be considered unsafe and display malicious HTML-->
+    <!--but this is html that we wrote so we know it's safe and we're okay with using it-->
+    <!--ejs templates also have js embedded in them, so it can be rendered on the server-->
     <%- include("includes/head")%>
     <body>
         <%- include("includes/header")%>
@@ -7,9 +12,9 @@
             <!--post creates new user -->
             <!--form action tells what to do-->
             <form action="/edit-post/<%=post.id%>" method="POST">
-            <!--this adds JS that shows the error-->
+            <!--this adds JS that shows the error, when using js, just use %-->
             <% errors.forEach(error => { %>
-                <!--the = makes it escape the output text??????-->
+                <!--the = makes it escape the output html. it turns the variable into the text it's supposed to say-->
                 <p class="notice"><%= error %></p>
             <% }) %>
             <fieldset>
