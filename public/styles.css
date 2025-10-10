@@ -54,7 +54,7 @@ body {
   /*so basically the 1 fr keeps the left and right equal sizes, no matter screen size*/
   /*then the middle portion is the minimum of 720 px or 90% of the screen, so if 90% of the screen is bigger than 720, they use 720
   and keeps it so that on smaller screens, content can grow to 90% of viewport, overall this prevents overflow*/
-  grid-template-columns: 1fr min(45 rem, 90%) 1fr;
+  grid-template-columns: 1fr min(45rem, 90%) 1fr;
   /*this removes the deafult margin of the browser*/
   margin: 0;
   font-size: 20px;
@@ -73,7 +73,7 @@ body > header {
   background-color: var(--accent-bg-color);
   border-bottom: var(--border-width) solid var(--border);
   text-align: center;
-  grid-column: 1 / -1 !important;
+  grid-column: 1 / -1;
   padding: 0 0.5rem 2rem;
 }
 
