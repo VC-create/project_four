@@ -22,9 +22,9 @@ own copy of the variable, whereas root variables can be resued over and over in 
   /*defines border color*/
   --border: #898ea4;
   /*defines highlight color, used for buttons, etc*/
-  --highlight-color: #0d47a1;
+  --highlight-color: #186bbf;
   /*defines color when people hover over highlighted elements*/
-  --highlight-hover-color: #1266e2;
+  --highlight-hover-color: #6e7683;
   /*defines the text color of highlighted elements, ex:text inside buttons*/
   --highlight-text-color: var(--bg-color);
 }
@@ -104,16 +104,17 @@ p {
 
 p,
 h2 {
+  /*this makes it so that if a word is too long it goes to the next line*/
   overflow-wrap: break-word;
 }
 
-h2{
+h2,p{
   line-height: 1.1;
 }
 
 @media only screen and (width <= 720px) {
   h2 {
-    font-size: 2.1rem;
+    font-size: 2rem;
   }
 }
 
@@ -128,25 +129,21 @@ a:hover {
   text-decoration: none;
 }
 
+/*need to have this so it works for all buttons, the class of button that we used for edit post, and any buttons in links*/
 button,
 .button,
-a.button,
-input[type="submit"],
-input[type="reset"],
-input[type="button"] {
-  border: var(--border-width) solid var(--hightlight-color);
+a.button {
+  border: var(--border-width) solid var(--text-color);
   background-color: var(--highlight-color);
   color: var(--highlight-text-color);
-  padding: 0.5rem 0.9rem;
-  line-height: normal;
+  padding: 0.5rem;
   text-decoration: none;
 }
 
+/*basically we need this second line of button not because we use an a tag with a type button which can't support diasbled*/
+/*it means that it applies to anything with a class button that isn't disabled, when you hover over it*/
 button:enabled:hover,
-.button:not([aria-disabled="true"]):hover,
-input[type="submit"]:enabled:hover,
-input[type="reset"]:enabled:hover,
-input[type="button"]:enabled:hover {
+.button:not([aria-disabled="true"]):hover{
   background-color: var(--highlight-hover-color);
   border-color: var(--highlight-hover-color);
   cursor: pointer;
