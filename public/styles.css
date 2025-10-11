@@ -10,11 +10,11 @@ own copy of the variable, whereas root variables can be resued over and over in 
   /*defines how rounded buttons will be on the site(bigger # means more rounded)*/
   --standard-border-radius: 5px;
   /*defines width(thickness) of borders across site*/
-  --border-width: 2px;
+  --border-width: 3px;
   /*defines background color*/
   --bg-color: #cdeaf4;
   /*defines additional background color*/
-  --accent-bg-color: #77a1c5;
+  --accent-bg-color: #8abde9;
   /*defines text color*/
   --text-color: #212121;
   /*defines secondary text color - lighter gray for footers, etc*/
@@ -69,45 +69,32 @@ body > * {
 }
 
 /* header and footer */
-body > header {
+header {
   background-color: var(--accent-bg-color);
   border-bottom: var(--border-width) solid var(--border);
   text-align: center;
   grid-column: 1 / -1;
-  padding: 0 0.5rem 2rem;
+  padding: 1rem;
 }
 
-body > header :only-child {
-  margin-block-start: 2rem;
+header h2 {
+  margin: 3rem auto;
 }
 
-body > header h1 {
-  max-width: 1200px;
-  margin: 1rem auto;
-}
-
-body > header p {
-  max-width: 40rem;
-  margin: 1rem auto;
-}
-
-body > footer {
+footer {
   color: var(--text-light);
   text-align: center;
   border-top: var(--border-width) solid var(--border);
+  grid-column:-1/1;
   margin-top: 4rem;
-  padding: 2rem 1rem 1.5rem;
-  font-size: 0.9rem;
+  padding: 2rem;
+  font-size: 1.5rem;
 }
 
 /* typography */
-h1 {
-  font-size: 3rem;
-}
-
 h2 {
-  margin-top: 3rem;
-  font-size: 2.6rem;
+  margin-top: 1rem;
+  font-size: 2.5rem;
 }
 
 h3 {
@@ -169,6 +156,7 @@ h3 {
 a,
 a:visited {
   color: var(--highlight-color);
+  text-decoration:underline;
 }
 
 a:hover {
