@@ -342,5 +342,4 @@ app.post("/create-post", mustBeLoggedIn, (req,res)=>{
 
 });
 
-const PORT = 3000;
 app.listen(PORT);
