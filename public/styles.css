@@ -8,7 +8,7 @@ own copy of the variable, whereas root variables can be resued over and over in 
     "Nimbus Sans L", Roboto, "Noto Sans", "Segoe UI", Arial, Helvetica,
     "Helvetica Neue", sans-serif;
   /*defines how rounded buttons will be on the site(bigger # means more rounded)*/
-  --standard-border-radius: 5px;
+  --standard-border-radius: 20px;
   /*defines width(thickness) of borders across site*/
   --border-width: 3px;
   /*defines background color*/
@@ -112,6 +112,7 @@ h2,p{
   line-height: 1.1;
 }
 
+/*decreases big header font size if on a small screen so that it doesn't look too big*/
 @media only screen and (width <= 720px) {
   h2 {
     font-size: 2rem;
@@ -131,72 +132,33 @@ a:hover {
 
 /*need to have this so it works for all buttons, the class of button that we used for edit post, and any buttons in links*/
 button,
-.button,
+form button,
 a.button {
   border: var(--border-width) solid var(--text-color);
   background-color: var(--highlight-color);
   color: var(--highlight-text-color);
-  padding: 0.5rem;
+  /*create big cute buttons!*/
+  padding: 1rem;
+  /*remove the link on the buttons*/
   text-decoration: none;
+  /*adds space between buttons*/
+  margin:0.2rem;
 }
 
 /*basically we need this second line of button not because we use an a tag with a type button which can't support diasbled*/
 /*it means that it applies to anything with a class button that isn't disabled, when you hover over it*/
 button:enabled:hover,
-.button:not([aria-disabled="true"]):hover{
+.button:hover{
   background-color: var(--highlight-hover-color);
   border-color: var(--highlight-hover-color);
   cursor: pointer;
 }
 
-/* navigation */
+/* navigation, needed because in header.ejs we have a navbar with a tags in it for the create post, log in and out  */
 header nav {
-  padding: 1rem 0 0;
+  padding: 2rem;
   font-size: 1rem;
   line-height: 2;
-}
-
-header nav ul,
-header nav ol {
-  display: flex;
-  flex-flow: wrap;
-  place-content: space-around center;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-}
-
-header nav a,
-header nav a:visited {
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--standard-border-radius);
-  color: var(--text-color);
-  margin: 0 0.5rem 1rem;
-  padding: 0.1rem 1rem;
-  text-decoration: none;
-  display: inline-block;
-}
-
-header nav a:hover,
-header nav a.current,
-header nav a[aria-current="page"],
-header nav a[aria-current="true"] {
-  background: var(--bg-color);
-  border-color: var(--highlight-color);
-  color: var(--highlight-color);
-}
-
-@media only screen and (width <= 720px) {
-  header nav a {
-    border: none;
-    padding: 0;
-    text-decoration: underline;
-  }
-
-  header nav a.current {
-    background: none;
-  }
 }
 
 /* layout components */

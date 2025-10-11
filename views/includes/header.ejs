@@ -4,11 +4,12 @@
                 <!--if user=true, they're logged in, it's a valid token-->
                 <!--if they're logged in, show them the create post and log out options with corresponding routes-->
                 <% if(user){%>
-                    <a href="/create-post">Create Post</a>
-                    <a href="/logout">Log Out</a>
+                    <!--gave these a class of button to make it easier to style, can style them as buttons and not as a in nav-->
+                    <a href="/create-post" class="button">Create Post</a>
+                    <a href="/logout" class="button">Log Out</a>
                 <%} else {%>
                     <!--otherwise if they're not logged in, show them the login option-->
-                    <a href="/login">Log In</a>
+                    <a href="/login" class="button">Log In</a>
                 <% }%>
             </nav>
         </header>
