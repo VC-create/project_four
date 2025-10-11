@@ -163,7 +163,7 @@ header nav {
 
 /* layout components */
 main {
-  padding-top: 1.5rem;
+  padding-top: 1rem;
 }
 
 [dir="rtl"] aside {
@@ -180,8 +180,7 @@ main {
 
 /* content blocks */
 article,
-fieldset,
-dialog {
+fieldset{
   border: var(--border-width) solid var(--border);
   border-radius: var(--standard-border-radius);
   margin-bottom: 1rem;
