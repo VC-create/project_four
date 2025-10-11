@@ -9,7 +9,8 @@
             <form action="/login" method="POST">
             <!--this adds JS that shows the error-->
             <% errors.forEach(error => { %>
-                <!--the = makes it escape the output text??????-->
+                <!--the = makes it escape the output text and get the actual value of it-->
+                <!--display erros at top of page-->
                 <p class="notice"><%= error %></p>
             <% }) %>
             <fieldset>

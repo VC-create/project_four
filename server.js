@@ -1,4 +1,6 @@
 require("dotenv").config();
+//the above line is required to be first, just configures the .env file so we can access the stuff in it
+//this next line helps with the markdown for the blog
 const sanitizeHTML = require("sanitize-html");
 const marked = require("marked");
 //previous line configs the .env file so we can access the stuff in it
@@ -10,7 +12,7 @@ const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 //this imports our database and names it ourApp.db
 const db = require("better-sqlite3")("ourApp.db")
-//this makes the performace and speed better
+//most modern and efficent, copies changes to seperate file before being approved
 db.pragma("journal_mode = WAL")
 
 //database setup here
@@ -43,15 +45,16 @@ const createTables = db.transaction(() => {
 });
 createTables();
 //database setup ends here
-
-
-
+//this line is required to run the app
 const app = express();
 
+//this renders the ejs files
 app.set("view engine", "ejs");
-//makes it so that we can access values the user put in
+//makes it so that we can access values the user put into the form, extended=false means use the simpler version
 app.use(express.urlencoded({extended:false}))
+//express serves static files from folder called public
 app.use(express.static("public"));
+//enables us to use cookies 
 app.use(cookieParser())
 
 //middleware
@@ -59,25 +62,31 @@ app.use(cookieParser())
 app.use(function(req,res,next){
     //make our markdown function avialable to views
     //marked.parse turns the text into html 
+    //so in our ejs files we can call this filterUserHTML function 
     res.locals.filterUserHTML = function(content){
         return sanitizeHTML(marked.parse(content), {
-            allowedTags: ["p", "br", "ul", "li", "ol", "strong", "bold", "i", "em", "h1", "h2", "h3", "h4", "h5", "h6"] , 
+            allowedTags: ["p", "br", "ul", "li", "ol", "strong", "i", "em", "h1", "h2", "h3", "h4", "h5", "h6"] , 
+            //it removes all attributes
             allowedAttributes: {}
         })
     }
     //locals makes it avaible to the views system
+    //this makes it so the ejs files can render the errors
     res.locals.errors = [];
 
     //try to decode incoming cookie
     //helps to check if user is logged in
     try {
+        //if decodation works, cookie exists and signature is valid, and store decoded on req object
         const decoded = jwt.verify(req.cookies.ourSimpleApp,process.env.JWTSECRET);
         req.user = decoded;
     } catch (error) {
         req.user = false;
     }
+    //this makes it so that user is avaible in the ejs templates
     res.locals.user = req.user;
     //console.log(req.user);
+    //next is needed so that it moves on and the request doesn't hang
     next();
     //first it sets the array then renders the homepage 
 });
@@ -109,13 +118,14 @@ app.get("/logout", (req,res)=>{
 
 app.post("/login",(req,res)=>{
     //check for errors when logging in - when they click the login button
-    let errors=[]
+    let errors=[];
 
-    //check to make sure the type is a string and there's no funny buisness
+    //check to make sure the type is a string
     if(typeof req.body.username!=="string") req.body.username=""
     if(typeof req.body.password!=="string") req.body.password=""
 
     //if the username or password is empty give error message
+    //use .trim incase there's spaces in front or at the end of username, so it just reads the text and not spaces
     if(req.body.username.trim()=="") errors=["Invalid username/password"];
     if(req.body.username=="") errors=["Invalid username/password"];
     
@@ -144,13 +154,18 @@ app.post("/login",(req,res)=>{
     }
 
     //give them a cookie if its actually a match and redirect them
+    //then middleware can verfiy the user
     const ourTokenValue = jwt.sign({exp: Math.floor(Date.now()/1000) + 60*60*24,skyColor:"blue",userid:userInQuestion.id, username: userInQuestion.username},process.env.JWTSECRET)
     
     //makes it secure for them
     res.cookie("ourSimpleApp",ourTokenValue,{
+        //next line prevents XSS attacks
         httpOnly:true,
+        //only sent over on secure connections
         secure:true,
+        //next line prevents CSRF attacks, cookies only sent to our site
         sameSite:"strict",
+        //controls when cookie is deleted
         maxAge:1000 * 60 * 60 * 24
     })
 
@@ -205,6 +220,7 @@ app.post("/register", (req,res)=>{
     const ourTokenValue = jwt.sign({exp: Math.floor(Date.now()/1000) + 60*60*24,skyColor:"blue",userid:ourUser.id, username: ourUser.username},process.env.JWTSECRET)
     
     //makes it secure for them
+    //we use a cookie to store the jwt, which browser sends with every request
     res.cookie("ourSimpleApp",ourTokenValue,{
         httpOnly:true,
         secure:true,
@@ -336,8 +352,7 @@ app.post("/create-post", mustBeLoggedIn, (req,res)=>{
     const getPostStatement = db.prepare("SELECT * FROM posts WHERE ROWID = ?");
     const realPost = getPostStatement.get(result.lastInsertRowid);
     //console.log(realPost);
-    //so far this just sends them to that unique id for the post, but it doesn't render them a page since that route 
-    //with the unique id doesn't exist yet
+    //this just sends them to that unique id for the post
     res.redirect(`/post/${realPost.id}`);
 
 });
