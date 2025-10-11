@@ -77,8 +77,9 @@ header {
   padding: 1rem;
 }
 
+/*styling the text in the header*/
 header h2 {
-  margin: 3rem auto;
+  margin: 2.5rem;
 }
 
 footer {
@@ -97,58 +98,22 @@ h2 {
   font-size: 2.5rem;
 }
 
-h3 {
-  margin-top: 3rem;
-  font-size: 2rem;
-}
-
-h4 {
-  font-size: 1.44rem;
-}
-
-h5 {
-  font-size: 1.15rem;
-}
-
-h6 {
-  font-size: 0.96rem;
-}
-
 p {
-  margin: 1.5rem 0;
+  margin: 1.5rem;
 }
 
 p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h2 {
   overflow-wrap: break-word;
 }
 
-h1,
-h2,
-h3 {
+h2{
   line-height: 1.1;
 }
 
 @media only screen and (width <= 720px) {
-  h1 {
-    font-size: 2.5rem;
-  }
-
   h2 {
     font-size: 2.1rem;
-  }
-
-  h3 {
-    font-size: 1.75rem;
-  }
-
-  h4 {
-    font-size: 1.25rem;
   }
 }
 

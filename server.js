@@ -274,10 +274,11 @@ app.post("/edit-post/:id", mustBeLoggedIn, (req,res)=>{
     if(post.authorid !== req.user.userid){
         return res.redirect("/");
     }
+    //this is after defining post because you need to pass post back to the edit-post template so it can render it
     const errors = sharedPostValidation(req);
     if(errors.length){
         //this gives the errors to the ejs template so it can display them using embedded js
-        return res.render("edit-post", {errors, post});
+        return res.render("edit-post.ejs", {errors, post});
     }
     const updateStatement = db.prepare("UPDATE posts SET title=?, body=? WHERE id=?");
     updateStatement.run(req.body.title, req.body.body, req.params.id);
@@ -324,6 +325,7 @@ app.get("/post/:id", (req,res)=>{
 app.post("/create-post", mustBeLoggedIn, (req,res)=>{
     const errors = sharedPostValidation(req);
     if(errors.length){
+        //here you don't pass it post because post isn't defined and you don't need to access anything about post
         return res.render("create-post",{errors});
     }
     //save into database by adding it into posts
