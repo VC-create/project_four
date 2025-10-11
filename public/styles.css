@@ -86,7 +86,7 @@ footer {
   color: var(--text-light);
   text-align: center;
   border-top: var(--border-width) solid var(--border);
-  grid-column:-1/1;
+  /*grid-column:-1/1;*/
   margin-top: 4rem;
   padding: 2rem;
   font-size: 1.5rem;
@@ -94,8 +94,7 @@ footer {
 
 /* typography */
 h2 {
-  margin-top: 1rem;
-  font-size: 2.5rem;
+  font-size: 3rem;
 }
 
 p {
@@ -156,35 +155,25 @@ button:enabled:hover,
 
 /* navigation, needed because in header.ejs we have a navbar with a tags in it for the create post, log in and out  */
 header nav {
-  padding: 2rem;
+  padding: 1rem;
   font-size: 1rem;
-  line-height: 2;
+  margin-bottom:1rem;
 }
 
-/* layout components */
+/* main part which holds form */
 main {
   padding-top: 1rem;
 }
 
-[dir="rtl"] aside {
-  float: left;
-}
-
-@media only screen and (width <= 720px) {
-  aside {
-    float: none;
-    width: 100%;
-    margin-inline-start: 0;
-  }
-}
-
-/* content blocks */
+/* content blocks, need article because it's used in single-post.ejs */
 article,
 fieldset{
   border: var(--border-width) solid var(--border);
   border-radius: var(--standard-border-radius);
   margin-bottom: 1rem;
-  padding: 1rem;
+  padding: 1.5rem;
+  /*have something lighter than the bg color*/
+  background-color: #e0e6e8;
 }
 
 /* forms and inputs */
@@ -192,32 +181,28 @@ textarea,
 input,
 button,
 .button {
+  /*use inherit for fonts so it looks consistent across all things in forms*/
   font-size: inherit;
   border-radius: var(--standard-border-radius);
   max-width: 100%;
   margin-bottom: 0.5rem;
-  padding: 0.5em;
+  padding: 0.5rem;
   font-family: inherit;
 }
 
 textarea,
 input {
+  /*have it be black text and have a border around it*/
   color: var(--text-color);
-  background-color: var(--bg-color);
   border: var(--border-width) solid var(--border);
 }
 
 label {
+  /*makes it so that instead of side by side, it's stacked, creates a new line for content*/
   display: block;
 }
 
-textarea:not([cols]) {
+/*doesn't stretch all the way to the end and leaves some space*/
+textarea {
   width: 90%;
-}
-
-/* miscellaneous */
-@media only screen and (width <= 720px) {
-  dialog {
-    max-width: calc(100vw - 2rem);
-  }
 }
