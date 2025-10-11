@@ -52,7 +52,16 @@ const app = express();
 app.set("view engine", "ejs");
 //makes it so that we can access values the user puts into ejs forms, extended=false means use the simpler version
 app.use(express.urlencoded({extended:false}))
-//express serves static files from folder called public
+//express serves static files from folder called public, and you don't need to go into public file, can reference directly by name
+//ejs files are templates that get filled in by server, then sent to broswer
+//ejs files render HTML, the broswer never sees views, it just sees what is replaced by the server
+//don't make views public because it's security risk
+//templates = for server side, not public, static like styles.css is for client side, are public
+//views/ holds EJS templates used by the server to render pages
+//public/ holds static files used by the browser to style those pages
+
+//ex: in our head, we can just say /styles.css dont need to go into public folder
+//the server gets request for styles.css and the line below tells express to look in the public folder
 app.use(express.static("public"));
 //enables us to use cookies 
 app.use(cookieParser())
