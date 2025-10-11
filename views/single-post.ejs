@@ -12,10 +12,10 @@
             </article>
             <% if (isAuthor) {%>
                 <!---Get request with a href here-->
-                <a href="/edit-post/<%=post.id%>" class="button">Edit Post</a>
+                <a href="/edit-post/<%=post.id%>" class="button">Edit Entry</a>
                 <!--post request here with the form-->
                 <form style="display:inline;" action="/delete-post/<%=post.id%>" method="POST">
-                    <button>Delete Post</button>
+                    <button>Delete Entry</button>
                 </form>
             <% } %>
 
