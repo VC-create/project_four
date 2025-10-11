@@ -50,7 +50,7 @@ const app = express();
 
 //this renders the ejs files
 app.set("view engine", "ejs");
-//makes it so that we can access values the user put into the form, extended=false means use the simpler version
+//makes it so that we can access values the user puts into ejs forms, extended=false means use the simpler version
 app.use(express.urlencoded({extended:false}))
 //express serves static files from folder called public
 app.use(express.static("public"));
@@ -116,6 +116,7 @@ app.get("/logout", (req,res)=>{
     res.redirect("/");
 });
 
+//use cookies when logging in and registering to verify the identity, server uses cookie to authenicate user
 app.post("/login",(req,res)=>{
     //check for errors when logging in - when they click the login button
     let errors=[];
@@ -267,6 +268,10 @@ function sharedPostValidation(req){
 app.get("/edit-post/:id", mustBeLoggedIn, (req,res)=>{
     //look up the post in question
     const statement = db.prepare("SELECT * FROM posts WHERE id =?");
+    //they go to the req.params.id, the id from the route
+    //ex: if id is 5, this next line runs SELECT * FROM posts WHERE id=5 to get that specific post
+    //then it saves it in a js object like this {id:5, title="whatever", etc}
+    //you then render the post using the ejs template and accessing what's in post from the db created earlier
     const post = statement.get(req.params.id);
 
     //check to make sure id of post exists, make sure they're not trying to access page that doesn't exist
