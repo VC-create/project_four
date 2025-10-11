@@ -357,4 +357,4 @@ app.post("/create-post", mustBeLoggedIn, (req,res)=>{
 
 });
 
-app.listen(PORT);
+app.listen(process.env.PORT);
