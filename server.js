@@ -248,7 +248,7 @@ function sharedPostValidation(req){
 
 //this just gets all the data that is needed to edit the post, but it doesn't save those edits into the database
 //you need a post request to save the changes in the database
-app.get("/edit-post/:id", mustBeLoggedIn,(req,res)=>{
+app.get("/edit-post/:id", mustBeLoggedIn, (req,res)=>{
     //look up the post in question
     const statement = db.prepare("SELECT * FROM posts WHERE id =?");
     const post = statement.get(req.params.id);
@@ -265,19 +265,19 @@ app.get("/edit-post/:id", mustBeLoggedIn,(req,res)=>{
     res.render("edit-post", {post});
 });
 
-app.post("/edit-post/:id", mustBeLoggedIn,(req,res)=>{
+app.post("/edit-post/:id", mustBeLoggedIn, (req,res)=>{
     const statement = db.prepare("SELECT * FROM posts WHERE id =?");
     const post = statement.get(req.params.id);
     if(!post){
         return res.redirect("/");
     }
-    if(post.authorid!==req.user.userid){
+    if(post.authorid !== req.user.userid){
         return res.redirect("/");
     }
     const errors = sharedPostValidation(req);
     if(errors.length){
         //this gives the errors to the ejs template so it can display them using embedded js
-        return res.render("edit-post", {errors});
+        return res.render("edit-post", {errors, post});
     }
     const updateStatement = db.prepare("UPDATE posts SET title=?, body=? WHERE id=?");
     updateStatement.run(req.body.title, req.body.body, req.params.id);
