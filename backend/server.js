@@ -51,7 +51,7 @@ createTables();
 const app = express();
 
 //this renders the ejs files
-app.set('views', path.join(project_four,'../frontend/views'));
+app.set('views', path.join(__dirname,'../frontend/views'));
 app.set("view engine", "ejs");
 //makes it so that we can access values the user puts into ejs forms, extended=false means use the simpler version
 app.use(express.urlencoded({extended:false}))
@@ -65,7 +65,7 @@ app.use(express.urlencoded({extended:false}))
 
 //ex: in our head, we can just say /styles.css dont need to go into public folder
 //the server gets request for styles.css and the line below tells express to look in the public folder
-app.use(express.static(path.join(project_four,'../frontend/public')));
+app.use(express.static(path.join(__dirname,'../frontend/public')));
 //enables us to use cookies 
 app.use(cookieParser())
 
