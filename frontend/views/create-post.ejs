@@ -9,14 +9,14 @@
             <form action="/create-post" method="POST">
             <!--this adds JS that shows the error-->
             <% errors.forEach(error => { %>
-                <!--the = makes it escape the output text??????-->
+                <!--the = makes it escape the output text and put what's the value of it-->
                 <p class="notice"><%= error %></p>
             <% }) %>
             <fieldset>
-                <legend>Write What You're Grateful For</legend>
+                <legend>Write What You're Grateful For!</legend>
                 <label for="title"><small>Title</small></label>
                 <input type="text" id="title" name="title">
-                <label for="body"><small>Content</small></label>
+                <label for="body"><small>Description</small></label>
                 <textarea name="body" id="body"></textarea>
                 <br/>
                 <button>Save New Entry</button>

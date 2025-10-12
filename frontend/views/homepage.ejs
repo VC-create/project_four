@@ -10,11 +10,10 @@
             <form action="/register" method="POST">
             <!--this adds JS that shows the error-->
             <% errors.forEach(error => { %>
-                <!--the = makes it escape the output text??????-->
                 <p class="notice"><%= error %></p>
             <% }) %>
             <fieldset>
-                <legend>Create an account</legend>
+                <legend>Create an Account</legend>
                 <label for="username"><small>Username</small></label>
                 <input type="text" id="username" name="username">
                 <label for="password"><small>Password</small></label>

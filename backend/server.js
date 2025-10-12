@@ -160,12 +160,18 @@ app.post("/login",(req,res)=>{
     }
 
     //comapre the password in the databse (userInQuestion.password) with what they entered in req.body
-    const matchOrNot = bcrypt.compareSync(req.body.password,userInQuestion.password)
-    if(!matchOrNot){
-        errors = ["Invalid username/password"];
-        return res.render("login.ejs",{errors});
+    async function match(){
+        try {
+            const match = await bcrypt.compare(req.body.password,userInQuestion.password);
+            if(!match){
+                errors = ["Invalid username/password"];
+                return res.render("login.ejs",{errors});
+            }
+        } catch (error) {
+            res.status(500).send('Server error');
+        }
     }
-
+    match();
     //give them a cookie if its actually a match and redirect them
     //then middleware can verfiy the user
     const ourTokenValue = jwt.sign({exp: Math.floor(Date.now()/1000) + 60*60*24,skyColor:"blue",userid:userInQuestion.id, username: userInQuestion.username},process.env.JWTSECRET)
@@ -216,9 +222,17 @@ app.post("/register", (req,res)=>{
         return res.render("homepage.ejs",{errors});
     }
 
-    //hashing the password
-    const salt = bcrypt.genSaltSync(10);
-    req.body.password = bcrypt.hashSync(req.body.password, salt);
+    //do an aysnc function to hash passwords so it doesn't block other requests
+    //await commands must be in an async function
+    async function hashPassword() {
+        try {
+            const salt = await bcrypt.genSalt(10);
+            req.body.password = bcrypt.hash(req.body.password, salt);
+        } catch (error) {
+            res.status(500).send('Server error');
+        } 
+    }
+    hashPassword();
     //save the user into the database
     const ourStatement = db.prepare("INSERT INTO users (username, password) VALUES (?,?)")
     const result = ourStatement.run(req.body.username, req.body.password)
@@ -270,7 +284,7 @@ function sharedPostValidation(req){
 
     //check to make sure it isn't empty
     if(!req.body.title) errors.push("You must provide a title");
-    if(!req.body.body) errors.push("You must provide content");
+    if(!req.body.body) errors.push("You must provide a description");
     
     return errors;
 }

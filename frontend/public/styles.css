@@ -24,7 +24,7 @@ own copy of the variable, whereas root variables can be resued over and over in 
   /*defines highlight color, used for buttons, etc*/
   --highlight-color: #186bbf;
   /*defines color when people hover over highlighted elements*/
-  --highlight-hover-color: #6e7683;
+  --highlight-hover-color: rgb(159, 167, 181);
   /*defines the text color of highlighted elements, ex:text inside buttons*/
   --highlight-text-color: var(--bg-color);
 }
