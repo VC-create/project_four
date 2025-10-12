@@ -129,7 +129,7 @@ app.get("/logout", (req,res)=>{
 });
 
 //use cookies when logging in and registering to verify the identity, server uses cookie to authenicate user
-app.post("/login",(req,res)=>{
+app.post("/login",async(req,res)=>{
     //check for errors when logging in - when they click the login button
     let errors=[];
 
@@ -160,18 +160,15 @@ app.post("/login",(req,res)=>{
     }
 
     //comapre the password in the databse (userInQuestion.password) with what they entered in req.body
-    async function match(){
-        try {
-            const match = await bcrypt.compare(req.body.password,userInQuestion.password);
-            if(!match){
-                errors = ["Invalid username/password"];
-                return res.render("login.ejs",{errors});
-            }
-        } catch (error) {
-            res.status(500).send('Server error');
+     try {
+        const match = await bcrypt.compare(req.body.password, userInQuestion.password);
+        if (!match) {
+            errors = ["Invalid username/password"];
+            return res.render("login.ejs", { errors });
         }
+    } catch (error) {
+        return res.status(500).send("Server error");
     }
-    match();
     //give them a cookie if its actually a match and redirect them
     //then middleware can verfiy the user
     const ourTokenValue = jwt.sign({exp: Math.floor(Date.now()/1000) + 60*60*24,skyColor:"blue",userid:userInQuestion.id, username: userInQuestion.username},process.env.JWTSECRET)
@@ -192,7 +189,7 @@ app.post("/login",(req,res)=>{
 
 });
 
-app.post("/register", (req,res)=>{
+app.post("/register", async (req,res)=>{
     const errors=[]
 
     if(typeof req.body.username!=="string") req.body.username=""
@@ -224,15 +221,12 @@ app.post("/register", (req,res)=>{
 
     //do an aysnc function to hash passwords so it doesn't block other requests
     //await commands must be in an async function
-    async function hashPassword() {
-        try {
-            const salt = await bcrypt.genSalt(10);
-            req.body.password = bcrypt.hash(req.body.password, salt);
-        } catch (error) {
-            res.status(500).send('Server error');
-        } 
-    }
-    hashPassword();
+    try {
+        const salt = await bcrypt.genSalt(10);
+        req.body.password = await bcrypt.hash(req.body.password, salt);
+    } catch (error) {
+        res.status(500).send('Server error');
+    } 
     //save the user into the database
     const ourStatement = db.prepare("INSERT INTO users (username, password) VALUES (?,?)")
     const result = ourStatement.run(req.body.username, req.body.password)
