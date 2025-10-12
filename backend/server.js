@@ -13,9 +13,12 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 //this imports our database and names it ourApp.db
-const db = require("better-sqlite3")("ourApp.db")
+//better-sqlite3 is completely synchronous, it completes everything before moving on, it's faster because you don't await stuff
+//but in the future, it will take too long with multiple users, so then switch to something else
+//better-sqlite is fast for one user, async is fast for many users and mutiple queries, etc
+const db = require("better-sqlite3")("ourApp.db");
 //most modern and efficent, copies changes to seperate file before being approved
-db.pragma("journal_mode = WAL")
+db.pragma("journal_mode = WAL");
 
 //database setup here
 //can see it by downloading from here https://sqlitebrowser.org/ and clicling open database and choosing ourApp.db
@@ -65,6 +68,7 @@ app.use(express.urlencoded({extended:false}))
 
 //ex: in our head, we can just say /styles.css dont need to go into public folder
 //the server gets request for styles.css and the line below tells express to look in the public folder
+//path.join helps it find the absolute path and know where to look, we imported path
 app.use(express.static(path.join(__dirname,'../frontend/public')));
 //enables us to use cookies 
 app.use(cookieParser())
@@ -77,7 +81,7 @@ app.use(function(req,res,next){
     //so in our ejs files we can call this filterUserHTML function 
     res.locals.filterUserHTML = function(content){
         return sanitizeHTML(marked.parse(content), {
-            allowedTags: ["p", "br", "ul", "li", "ol", "strong", "i", "em", "h1", "h2", "h3", "h4", "h5", "h6"] , 
+            allowedTags: ["p", "br", "ul", "li", "ol", "strong", "i", "h1", "h2", "h3", "h4", "h5", "h6"] , 
             //it removes all attributes
             allowedAttributes: {}
         })
@@ -316,6 +320,8 @@ app.post("/edit-post/:id", mustBeLoggedIn, (req,res)=>{
         return res.redirect("/");
     }
     //this is after defining post because you need to pass post back to the edit-post template so it can render it
+    //it needs to render the post so that it can say the body and title
+    //use sharedPostValidation so it makes sure the fields are not empty when they edit the post
     const errors = sharedPostValidation(req);
     if(errors.length){
         //this gives the errors to the ejs template so it can display them using embedded js
@@ -367,6 +373,7 @@ app.post("/create-post", mustBeLoggedIn, (req,res)=>{
     const errors = sharedPostValidation(req);
     if(errors.length){
         //here you don't pass it post because post isn't defined and you don't need to access anything about post
+        //post hasn't been create yet, so you just need to check for errors and if there are any, don't proceed, post isn't made
         return res.render("create-post",{errors});
     }
     //save into database by adding it into posts
